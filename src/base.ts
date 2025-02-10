@@ -23,6 +23,13 @@ export abstract class BaseApi<T extends Type = Type> {
 		}
 		return config;
 	}
+
+	protected interpolatePath(path: `/${string}`, values: unknown[]) {
+		return <`/${string}`>path.replace(/{\d+}/g, (substring) => {
+			const index = parseInt(substring.match(/\d+/)?.[0] || '');
+			return values[index] !== undefined ? String(values[index]) : substring;
+		});
+	}
 }
 
 type CacheKey = `${Type}${string}`;
